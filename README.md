@@ -13,7 +13,7 @@ Este projeto demonstra a implementação de dois microsserviços utilizando gRPC
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/Mellanie-Marques/GRPC-Parte-2.git
 cd pratica-microservicos-com-grpc-parte-1
 ```
 
