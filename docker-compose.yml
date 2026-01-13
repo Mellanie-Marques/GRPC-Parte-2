@@ -1,0 +1,55 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ms-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: minhasenha
+    ports:
+      - "3308:3306" # mapeado para 3308 no host para evitar conflitos locais
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  payment:
+    build:
+      context: .
+      dockerfile: microservices/payment/Dockerfile
+    container_name: ms-payment
+    depends_on:
+      - mysql
+    environment:
+      DB_DRIVER: mysql
+      DATA_SOURCE_URL: root:minhasenha@tcp(mysql:3306)/payment
+      APPLICATION_PORT: 3001
+      ENV: development
+    ports:
+      - "3001:3001"
+
+  order:
+    build:
+      context: .
+      dockerfile: microservices/order/Dockerfile
+    container_name: ms-order
+    depends_on:
+      - mysql
+      - payment
+    environment:
+      PAYMENT_SERVICE_URL: payment:3001
+      DB_DRIVER: mysql
+      DATA_SOURCE_URL: root:minhasenha@tcp(mysql:3306)/order_db
+      APPLICATION_PORT: 3000
+      ENV: development
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:
+
+networks:
+  default:
+    name: microservices-net
