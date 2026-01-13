@@ -1,4 +1,4 @@
-# Microservices com gRPC - Parte 1
+# Microservices com gRPC - Parte 2
 
 Este projeto demonstra a implementação de dois microsserviços utilizando gRPC em Go: um serviço de pedidos (orders) e um serviço de pagamentos (payments), ambos com persistência em MySQL. O serviço de pedidos se comunica com o serviço de pagamentos via gRPC para processar pagamentos de pedidos.
 
